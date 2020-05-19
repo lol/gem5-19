@@ -136,9 +136,11 @@ def config_cache(options, system):
 
     for i in range(options.num_cpus):
         if options.caches:
-            icache = icache_class(size=options.l1i_size,
+            icache = icache_class(clk_domain=system.clk_domain,
+                                  size=options.l1i_size,
                                   assoc=options.l1i_assoc)
-            dcache = dcache_class(size=options.l1d_size,
+            dcache = dcache_class(clk_domain=system.clk_domain,
+                                  size=options.l1d_size,
                                   assoc=options.l1d_assoc)
 
             # If we have a walker cache specified, instantiate two

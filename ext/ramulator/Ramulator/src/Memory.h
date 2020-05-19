@@ -87,7 +87,7 @@ public:
 	intel_quad_chan,
         RoRaBaChCo_XOR_new,	  
         MAX,
-	  } type = Type::RoRaBaChCo_XOR_new;
+	  } type = Type::RoRaBaChCo;
     //daz3
     // } type = Type::RoBaRaCoCh;
 

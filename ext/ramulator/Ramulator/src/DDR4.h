@@ -207,6 +207,10 @@ public:
         DDR4_3200_base_quarter_w16,// for different cacheline size
         DDR4_3200_base_quarter_w32,
         DDR4_3200_base_quarter_w64,
+        DDR4_3734_reduced_tRCD_tRP,
+        DDR4_2666_base,
+        DDR4_4000_base,
+        DDR4_4000_base_reduced,
         MAX
     }mySpeed;
     // };
@@ -251,9 +255,10 @@ public:
         {2400, (400.0/3)*9, (3/0.4)/9, 4, 4, 6, 2, 18, 18, 18, 12, 39, 57, 9, 3, 9, 18, 0, 0, 0, 0, 0, 6, 8, 0, 7, 0, 0},
         {3200, 1600, 0.625, prefetch_size/2/*DDR*/, 4,     10,   2,    22, 22,  22, 16,  56,  78, 12,  4,    12,   24, 8,    10,   40,  0,   0,    8,  10, 0,     8,     0,  0},
         // daz3
-        {3200, 1600, 0.625, prefetch_size/2/*DDR*/, 4,      8,   2,    22, 22,  22, 20,  52,  74, 12,  4,    12,   24, 4,     8,   34,  880, 12480,   8,   10,  0,   9,   896, 1024},
-        {3200, 1600, 0.625, prefetch_size/2/*DDR*/, 4,      8,   2,    22, 22,  22, 20,  52,  74, 12,  0,     0,   24, 4,     8,   34,  880, 12480,   8,   10,  0,   9,   896, 1024},
-        {3200, 1600, 0.625, prefetch_size/2/*DDR*/, 4,      8,   2,    22, 22,  22, 20,  52,  74, 12,  4,    12,   24, 4,     8,   34,    0, 12480,   8,   10,  0,   9,   896, 1024},
+        // {3200, 1600, 0.625, prefetch_size/2[>DDR<], 4,      8,   2,    22, 22,  22, 20,  52,  74, 12,  4,    12,   24, 4,     8,   34,  880, 12480,   8,   10,  0,   9,   896, 1024},
+        {3200, 1600, 0.625, prefetch_size/2/*DDR*/, 4,      8,   2,    22, 22,  22, 20,  52,  74, 12,  4,    12,   24, 4,     8,   34,  480, 12480,   8,   10,  0,   9,   896, 1024},
+        {3200, 1600, 0.625, prefetch_size/2/*DDR*/, 4,      8,   2,    22, 22,  22, 20,  52,  74, 12,  0,     0,   24, 4,     8,   34,  480, 12480,   8,   10,  0,   9,   896, 1024},
+        {3200, 1600, 0.625, prefetch_size/2/*DDR*/, 4,      8,   2,    22, 22,  22, 20,  52,  74, 12,  0,     0,   24, 4,     8,   34,    0, 12480,   8,   10,  0,   9,   896, 1024},
         {3200, 1600, 0.625, prefetch_size/2/*DDR*/, 4,      8,   2,    22, 22,  22, 20,  52,  74, 12,  0,     0,   24, 4,     8,   48,    0, 12480,   8,   10,  0,   9,   896, 1024},
         {3200, 1600, 0.625, prefetch_size/2/*DDR*/, 4,      8,   2,    22, 22,  22, 20,  52,  74, 12,  0,     0,   24, 0,     0,    0,    0, 12480,   8,   10,  0,   9,   896, 1024},
         {3200, 1600, 0.625, prefetch_size/2/*DDR*/, 4,      8,   2,    22, 22,  22, 20,  52,  74, 12,  0,     0,   24, 0,     0,    0,    0, 12480,   8,   10,  0,   9,   896, 1024},
@@ -281,9 +286,13 @@ public:
         {6400, 3200, 0.3125, prefetch_size/*DDR*/, 8,      16,   4,    44, 44,  44, 40,  104,  148, 24,  0,     0,   48, 0,     0,    0,    0, 24960,   16,   20,  0,   18,   1792, 2048},
         {3200, 1600, 0.625, prefetch_size/2/*DDR*/, 4,      8,   2,    22, 22,  22, 20,  52,  74, 12,  4,    12,   24, 4,     8,   34,  880, 12480,   8,   10,  0,   9,   896, 1024},
         {1600, 800, 1.25, prefetch_size/4/*DDR*/, 2,      4,   1,    11, 11,  11, 10,  26,  37, 6,  0,     0,   12, 0,     0,    0,    0, 6240,   4,   5,  0,   5,   448, 512},
-        {800, 400, 2.5, prefetch_size/8/*DDR*/, 1,      2,   1,    6, 6,  6, 5,  13,  14, 3,  0,     0,   6, 0,     0,    0,    0, 3120,   2,   3,  0,   3,   224, 256}
-        //rate, f eq, tCK,  nBL, nCCDS nCCDL nRTRS nCL nRCD nRP nCWL nRAS nRC nRTP nWTRS nWTRL nWR nRRDS nRRDL nFAW nRFC nREFI nPD nXP nXPDLL nCKESR nXS nXSDLL
-        // //rate, freq, tCK,  nBL,           nCCDS  nCCDL nRTRS nCL nRCD nRP nCWL nRAS nRC nRTP nWTRS nWTRL nWR nRRDS nRRDL nFAW nRFC nREFI nPD nXP nXPDLL nCKESR nXS nXSDLL
+        {800, 400, 2.5, prefetch_size/8/*DDR*/, 1,      2,   1,    6, 6,  6, 5,  13,  14, 3,  0,     0,   6, 0,     0,    0,    0, 3120,   2,   3,  0,   3,   224, 256},
+        //rate, freq, tCK,  nBL, nCCDS nCCDL nRTRS nCL nRCD nRP nCWL nRAS nRC nRTP nWTRS nWTRL nWR nRRDS nRRDL nFAW nRFC nREFI nPD nXP nXPDLL nCKESR nXS nXSDLL
+        // rate, freq, tCK,  nBL,                  nCCDS  nCCDL nRTRS nCL nRCD nRP nCWL nRAS nRC nRTP nWTRS nWTRL nWR nRRDS nRRDL 480 nFAW nRFC nREFI nPD nXP nXPDLL nCKESR nXS nXSDLL
+        {3734, 1867, 0.537, prefetch_size/2/*DDR*/, 4,      10,   3,    26, 26,  26, 24,  61,  87, 14,  5,    14,   28, 5,     10,   40,   560, 14563,   12,   12,  0,   11,   1046, 1195},
+        {2666, 1333, 0.75, prefetch_size/2/*DDR*/, 4,        7,   2,    19, 19,  19, 17,  44,  62, 10,  4,    10,   20, 4,     7,    29,   734, 10400,   7,   9,   0,   8,   747, 854},
+        {4000, 2000, 0.5, prefetch_size/2/*DDR*/,  4,       10,   2,    27, 27,  27, 25,  65,  92, 15,  4,    15,   30,  4,    10,   42,   600, 15600,   8,   12,  0,   11,   1120, 1280},
+        {4000, 2000, 0.5, prefetch_size/2/*DDR*/,  4,       10,   2,    27, 27,  27, 25,  65,  92, 15,  4,    15,   30, 4,     10,   42,   600, 15600,   0,    0,  0,    0,      0,    0}
     }, speed_entry;
 
     int read_latency;

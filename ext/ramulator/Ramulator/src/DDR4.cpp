@@ -65,6 +65,10 @@ map<string, enum DDR4::Speed> DDR4::speed_map = {
     {"DDR4_3200_base_quarter_w16", DDR4::Speed::DDR4_3200_base_quarter_w16},
     {"DDR4_3200_base_quarter_w32", DDR4::Speed::DDR4_3200_base_quarter_w32},
     {"DDR4_3200_base_quarter_w64", DDR4::Speed::DDR4_3200_base_quarter_w64},
+    {"DDR4_3734_reduced_tRCD_tRP", DDR4::Speed::DDR4_3734_reduced_tRCD_tRP},
+    {"DDR4_2666_base", DDR4::Speed::DDR4_2666_base},
+    {"DDR4_4000_base", DDR4::Speed::DDR4_4000_base},
+    {"DDR4_4000_base_reduced", DDR4::Speed::DDR4_4000_base_reduced},
 };
 
 
@@ -89,6 +93,23 @@ DDR4::DDR4(Org org, Speed speed)
     else if(int(org) == int(DDR4::Org::DDR4_4Gb_x8_w64))
     {
         channel_width = 64;
+    }
+
+    if(int(speed) == int(DDR4::Speed::DDR4_3734_reduced_tRCD_tRP)
+            || int(speed) == int(DDR4::Speed::DDR4_4000_base_reduced))
+    {
+        SpeedEntry& s = speed_entry;
+        int _RCD = s.nRCD;
+        int _RP = s.nRP;
+        int _REFI = s.nREFI;
+        s.nRAS -= 0.12 * _RCD;
+        s.nRC -= (0.12 * _RCD + 0.5 * _RP);
+        _RCD *= 0.88;
+        s.nRCD = _RCD;
+        _RP *= 0.5;
+        s.nRP = _RP;
+        _REFI *= 4;
+        s.nREFI = _REFI;
     }
 
     if(int(speed) == int(DDR4::Speed::DDR4_3200_ideal_v4) || int(speed) == int(DDR4::Speed::DDR4_3600_ideal_v4) ||
@@ -221,6 +242,9 @@ void DDR4::init_speed()
         case 2933: break; // gagan
         case 3200: speed = 4; break;
         case 3600: speed = 5; break;
+        case 3734: break;
+        case 4000: break;
+        case 2666: break;
         case 3866: speed = 6; break;
         case 6400: break;//daz3
         case 800: break;//daz3
@@ -260,6 +284,10 @@ void DDR4::init_speed()
             && mySpeed != DDR4::Speed::DDR4_3200_base_quarter_w16
             && mySpeed != DDR4::Speed::DDR4_3200_base_quarter_w32
             && mySpeed != DDR4::Speed::DDR4_3200_base_quarter_w64
+            && mySpeed != DDR4::Speed::DDR4_3734_reduced_tRCD_tRP
+            && mySpeed != DDR4::Speed::DDR4_2666_base
+            && mySpeed != DDR4::Speed::DDR4_4000_base
+            && mySpeed != DDR4::Speed::DDR4_4000_base_reduced
        // gagan
             && mySpeed != DDR4::Speed::DDR4_2400R_base
             && mySpeed != DDR4::Speed::DDR4_2400R_ideal_nbr_lbb

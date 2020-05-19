@@ -26,7 +26,7 @@ public:
 
     enum class Type {
       FCFS, FRFCFS, FRFCFS_Cap, FRFCFS_PriorHit, FRFCFS_DepPre, MAX
-    } type = Type::FRFCFS_DepPre;
+    } type = Type::FRFCFS_PriorHit;
     //} type = Type::FCFS;
 
     long cap = 16;

@@ -28,3 +28,7 @@ m5out
 /system/arm/bootloader/arm64/boot.arm64
 /system/arm/bootloader/arm64/boot_emm.arm64
 /system/arm/bootloader/arm64/boot_v2.arm64
+*._pbs
+*._pbs.e*
+*._pbs.o*
+tmp/

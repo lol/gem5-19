@@ -43,7 +43,7 @@ import m5.objects
 from common import ObjectList
 from . import HMC
 
-def create_mem_ctrl(cls, r, i, nbr_mem_ctrls, intlv_bits, intlv_size):
+def create_mem_ctrl(cls, r, i, nbr_mem_ctrls, intlv_bits, intlv_size, options):
     """
     Helper function for creating a single memoy controller from the given
     options.  This function is invoked multiple times in config_mem function
@@ -64,8 +64,17 @@ def create_mem_ctrl(cls, r, i, nbr_mem_ctrls, intlv_bits, intlv_size):
     # mapping and row-buffer size
     ctrl = cls()
 
+    # gagan : ramulator integration
+    if issubclass(cls, m5.objects.Ramulator):
+        if not options.ramulator_config:
+            fatal("--mem-type=ramulator require --ramulator-config option")
+        ctrl.real_warm_up = options.real_warm_up
+        ctrl.config_file = options.ramulator_config
+        ctrl.output_dir = m5.options.outdir + "/"
+        print("Ramulator system configuration file = ", options.ramulator_config)
+        ctrl.num_cpus = options.num_cpus
     # Only do this for DRAMs
-    if issubclass(cls, m5.objects.DRAMCtrl):
+    elif issubclass(cls, m5.objects.DRAMCtrl):
         # If the channel bits are appearing after the column
         # bits, we need to add the appropriate number of bits
         # for the row buffer size
@@ -165,7 +174,7 @@ def config_mem(options, system):
     for r in system.mem_ranges:
         for i in range(nbr_mem_ctrls):
             mem_ctrl = create_mem_ctrl(cls, r, i, nbr_mem_ctrls, intlv_bits,
-                                       intlv_size)
+                                       intlv_size, options)
             # Set the number of ranks based on the command-line
             # options if it was explicitly set
             if issubclass(cls, m5.objects.DRAMCtrl) and opt_mem_ranks:

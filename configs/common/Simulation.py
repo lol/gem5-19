@@ -266,7 +266,16 @@ def scriptCheckpoints(options, maxtick, cptdir):
     return exit_event
 
 def benchCheckpoints(options, maxtick, cptdir):
-    exit_event = m5.simulate(maxtick - m5.curTick())
+    # gagan : cache warm up
+    #exit_event = m5.simulate(maxtick - m5.curTick())
+
+    exit_event = m5.simulate(options.real_warm_up)
+    exit_cause = exit_event.getCause()
+    m5.stats.dump()
+    m5.stats.reset()
+
+    print("*** REAL SIMULATION ***")
+    exit_event = m5.simulate(options.rel_max_tick)
     exit_cause = exit_event.getCause()
 
     num_checkpoints = 0
@@ -665,9 +674,12 @@ def run(options, root, testsys, cpu_class):
                     str(testsys.cpu[0].max_insts_any_thread))
             exit_event = m5.simulate()
         else:
-            print("Switch at curTick count:%s" % str(10000))
-            exit_event = m5.simulate(10000)
-        print("Switched CPUS @ tick %s" % (m5.curTick()))
+            # gagan : atomic warm up
+            print("Atomic warm up ends at curTick count:%s" % str(options.atomic_warm_up))
+            exit_event = m5.simulate(options.atomic_warm_up)
+            m5.stats.dump()
+            m5.stats.reset()
+        print("Atomic warm up ended. Switched CPUS @ tick %s" % (m5.curTick()))
 
         m5.switchCpus(testsys, switch_cpu_list)
 
@@ -715,7 +727,8 @@ def run(options, root, testsys, cpu_class):
     else:
         if options.fast_forward:
             m5.stats.reset()
-        print("**** REAL SIMULATION ****")
+        print("**** REAL WARMUP ****")
+	m5.stats.reset()
 
         # If checkpoints are being taken, then the checkpoint instruction
         # will occur in the benchmark code it self.

@@ -92,7 +92,7 @@ def addNoISAOptions(parser):
                       help = """Top-level voltage for blocks running at system
                       power supply""")
     parser.add_option("--sys-clock", action="store", type="string",
-                      default='1GHz',
+                      default='21GHz',
                       help = """Top-level clock for blocks running at system
                       speed""")
 
@@ -112,6 +112,8 @@ def addNoISAOptions(parser):
                       help="Specify the physical memory size (single memory)")
     parser.add_option("--enable-dram-powerdown", action="store_true",
                        help="Enable low-power states in DRAMCtrl")
+    parser.add_option("--ramulator-config", type="string", dest="ramulator_config",
+                      help="Specify Ramulator configuration file, overrides other --mem-XXX options")
 
 
     parser.add_option("--memchecker", action="store_true")
@@ -128,7 +130,7 @@ def addNoISAOptions(parser):
     parser.add_option("--num-l3caches", type="int", default=1)
     parser.add_option("--l1d_size", type="string", default="64kB")
     parser.add_option("--l1i_size", type="string", default="32kB")
-    parser.add_option("--l2_size", type="string", default="2MB")
+    parser.add_option("--l2_size", type="string", default="8MB")
     parser.add_option("--l3_size", type="string", default="16MB")
     parser.add_option("--l1d_assoc", type="int", default=2)
     parser.add_option("--l1i_assoc", type="int", default=2)
@@ -136,6 +138,10 @@ def addNoISAOptions(parser):
     parser.add_option("--l3_assoc", type="int", default=16)
     parser.add_option("--cacheline_size", type="int", default=64)
 
+    # gagan : Prefetcher Options
+    parser.add_option("--l2prefetcher", action="store_true")
+    parser.add_option("--l3prefetcher", action="store_true")
+    
     # Enable Ruby
     parser.add_option("--ruby", action="store_true")
 
@@ -211,7 +217,7 @@ def addCommonOptions(parser):
                       the selected cache)""")
     parser.add_option("--checker", action="store_true");
     parser.add_option("--cpu-clock", action="store", type="string",
-                      default='2GHz',
+                      default='2.8GHz',
                       help="Clock for blocks running at CPU speed")
     parser.add_option("--smt", action="store_true", default=False,
                       help = """
@@ -473,3 +479,9 @@ def addFSOptions(parser):
     parser.add_option("--command-line-file", action="store",
                       default=None, type="string",
                       help="File with a template for the kernel command line")
+
+    # gagan : warm up
+    parser.add_option("--atomic-warm-up", action="store", type="int", default=100,
+		      help="specify the atomic warm up time")
+    parser.add_option("--real-warm-up", action="store", type="int", default=100,
+		      help="specify the real warm up time")
